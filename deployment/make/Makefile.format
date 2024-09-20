@@ -1,0 +1,15 @@
+GOFUMPT               ?= $(shell pwd)/$(BIN_DIR)/gofumpt
+GOFUMPT_VERSION       ?= v0.7.0
+
+.PHONY: fmt
+fmt: gofumpt 
+.PHONY: fmt
+gofumpt: $(GOFUMPT) ## Run gofumpt
+	$(Q)$(ECHO) "GO" $(call UPPER, $@)
+	$(Q)$(GOFUMPT) -w . 2>&1 | $(FORMAT)
+
+$(GOFUMPT):
+	$(Q)$(ECHO) "GETTING GOFUMPT"
+	$(Q)$(MKDIR) -p $(BIN_DIR)
+	$(Q) curl -sSfL -o$(GOFUMPT) https://github.com/mvdan/gofumpt/releases/download/$(GOFUMPT_VERSION)/gofumpt_$(GOFUMPT_VERSION)_$(OS)_$(ARCH)
+	$(Q) chmod +x $(GOFUMPT)

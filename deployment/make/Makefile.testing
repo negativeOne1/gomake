@@ -1,0 +1,20 @@
+GOTESTSUM             ?= $(shell pwd)/$(BIN_DIR)/gotestsum
+GOTESTSUM_VERSION     ?= 1.12.0
+SHORT_TEST_FLAG       ?= -short
+TEST_FLAGS            ?= ./...
+
+##@ Testing
+.PHONY: test
+test: $(GOTESTSUM) ## Run unit tests
+	$(Q)$(ECHO) "GO" $(call UPPER, $@)
+	$(Q)$(GOTESTSUM) $(TEST_FLAGS) $(SHORT_TEST_FLAG) | $(FORMAT)
+
+test_integration: $(GOTESTSUM) ## Run integration tests
+	$(Q)$(ECHO) "GO" $(call UPPER, $@)
+	$(Q)$(GOTESTSUM) $(TEST_FLAGS) | $(FORMAT)
+
+
+$(GOTESTSUM):
+	$(Q)$(ECHO) "GOTESTSUM"
+	$(Q)$(MKDIR) -p $(BIN_DIR)
+	$(Q) curl -sSfL https://github.com/gotestyourself/gotestsum/releases/download/v$(GOTESTSUM_VERSION)/gotestsum_$(GOTESTSUM_VERSION)_$(OS)_$(ARCH).tar.gz | tar zx -C bin/ gotestsum

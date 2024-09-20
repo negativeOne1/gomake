@@ -1,0 +1,24 @@
+TRIVY                 ?= $(shell pwd)/$(BIN_DIR)/trivy
+TRIVY_VERSION         ?= v0.54.1
+
+
+##@ Security audit
+.PHONY: check-dockerfile
+check-dockerfile: $(TRIVY) ## Check Dockerfile
+	$(Q)$(ECHO) $(call UPPER, $@)
+	$(Q)$(SETUP_STTY)
+	$(Q)$(TRIVY) --exit-code 1 config Dockerfile 2>&1 | $(FORMAT)
+
+.PHONY: check-image
+check-image: $(TRIVY) ## Check Image
+	$(Q)$(ECHO) $(call UPPER, $@)
+ifndef IMG
+	$(error IMG variable is not set)
+endif
+	$(Q)$(SETUP_STTY)
+	$(Q)$(TRIVY) --exit-code 1 image $(IMG) --ignore-unfixed --scanners vuln --severity HIGH,CRITICAL 2>&1 | $(FORMAT)
+
+$(TRIVY):
+	$(Q)$(ECHO) "TRIVY"
+	$(Q)$(MKDIR) -p $(BIN_DIR)
+	$(Q) curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh $(DEBUG) | sh -s -- -b $(shell dirname $(TRIVY)) $(TRIVY_VERSION) $(DEBUG) | $(FORMAT)

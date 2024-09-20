@@ -1,0 +1,25 @@
+AIR                   ?= $(shell pwd)/$(BIN_DIR)/air
+AIR_VERSION           ?= 1.52.3
+
+##@ Development
+.PHONY: build
+build: $(BIN) ## Build executables
+$(BIN_DIR)/%: $(GO_SRC)
+	$(Q)$(ECHO) "GO" $(call UPPER, $@)
+	$(Q)$(MKDIR) -p $(BIN_DIR)
+	$(Q)$(GOENV) $(GOBUILD) $(LDFLAGS) -o $@ main.go 2>&1 | $(FORMAT)
+
+.PHONY: dev
+dev: $(AIR) ## Run with Air
+	$(Q)$(ECHO) "Running with Air"
+	$(Q)$(AIR) -c .air.toml
+
+.PHONY: run
+run: $(BIN) ## Run app
+	$(Q)./bin/app run
+
+$(AIR):
+	$(Q)$(ECHO) "AIR"
+	$(Q)$(MKDIR) -p $(BIN_DIR)
+	$(Q) curl -sSfL -o$(AIR) https://github.com/air-verse/air/releases/download/v$(AIR_VERSION)/air_$(AIR_VERSION)_$(OS)_$(ARCH)
+	$(Q) chmod +x $(AIR)
