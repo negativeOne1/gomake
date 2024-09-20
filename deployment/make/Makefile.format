@@ -2,9 +2,9 @@ GOFUMPT               ?= $(shell pwd)/$(BIN_DIR)/gofumpt
 GOFUMPT_VERSION       ?= v0.7.0
 
 .PHONY: fmt
-fmt: gofumpt 
+fmt: gofumpt ## Run gofumpt
 .PHONY: fmt
-gofumpt: $(GOFUMPT) ## Run gofumpt
+gofumpt: $(GOFUMPT)
 	$(Q)$(ECHO) "GO" $(call UPPER, $@)
 	$(Q)$(GOFUMPT) -w . 2>&1 | $(FORMAT)
 

@@ -3,8 +3,7 @@
 a collection of makefile providing simple, sensable and ci compatible targets to build, audit, develop and release go code
 
 ```bash
-gomake ❯ make                                                                                                                                                                                                                                                      2 on  main
-
+gomake ❯ make
 Usage:
   make <target>
 
@@ -21,7 +20,7 @@ Development
   run               Run app
   lint              Run golangci-lint linter
   lint-fix          Run golangci-lint linter and perform fixes
-  gofumpt           Run gofumpt
+  fmt               Run gofumpt
 
 Testing
   test              Run unit tests
