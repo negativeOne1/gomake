@@ -10,6 +10,7 @@
 ###############################################################################
 
 
+BASEDIR               ?= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 COLUMNS               ?= $(shell stty size | awk '{print $$2}')
 SETUP_STTY            ?= -stty columns $$(( $(COLUMNS) - 4 )) $(DEBUG)
 UPPER                 ?= $(shell echo '$1' | tr '[:lower:]' '[:upper:]')
@@ -75,8 +76,15 @@ ifndef IMG
 endif
 	$(Q) DOCKER_BUILDKIT=1 docker build --ssh default . -t ${IMG} | $(FORMAT)
 
-include ./make/Makefile.development
-include ./make/Makefile.linting
-include ./make/Makefile.format
-include ./make/Makefile.testing
-include ./make/Makefile.audit
+
+DEV_MAKE  := make/Makefile.development
+FOR_MAKE  := make/Makefile.format
+TST_MAKE  := make/Makefile.testing
+AUD_MAKE  := make/Makefile.audit
+
+ALL_MAKE  := ${BASEDIR}${DEV_MAKE} \
+						 ${BASEDIR}${FOR_MAKE} \
+						 ${BASEDIR}${TST_MAKE} \
+						 ${BASEDIR}${AUD_MAKE}
+
+include $(ALL_MAKE)
