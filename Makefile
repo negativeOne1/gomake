@@ -75,8 +75,8 @@ ifndef IMG
 endif
 	$(Q) DOCKER_BUILDKIT=1 docker build --ssh default . -t ${IMG} | $(FORMAT)
 
-include ./make/Makefile.development
-include ./make/Makefile.linting
-include ./make/Makefile.format
-include ./make/Makefile.testing
-include ./make/Makefile.audit
+include $(shell pwd)/make/Makefile.development
+include $(shell pwd)/make/Makefile.linting
+include $(shell pwd)/make/Makefile.format
+include $(shell pwd)/make/Makefile.testing
+include $(shell pwd)/make/Makefile.audit
