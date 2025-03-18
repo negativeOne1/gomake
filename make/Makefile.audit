@@ -9,6 +9,17 @@ check-dockerfile: $(TRIVY) ## Check Dockerfile
 	$(Q)$(SETUP_STTY)
 	$(Q)$(TRIVY) --exit-code 1 config Dockerfile 2>&1 | $(FORMAT)
 
+.PHONY: audit
+audit: ## Audit Dockerfile and Image
+	$(Q)$(ECHO) $(call UPPER, $@)
+	$(Q)$(ECHO) "MOD TIDY"
+	$(Q)$(GO) mod tidy -diff
+	$(Q)$(ECHO) "MOD VERIFY"
+	$(Q)$(GO) mod verify
+	$(Q)$(GORUN) honnef.co/go/tools/cmd/staticcheck@latest -checks=all,-ST1000,-U1000 ./...
+	$(Q)$(GORUN) golang.org/x/vuln/cmd/govulncheck@latest ./...
+
+
 .PHONY: check-image
 check-image: $(TRIVY) ## Check Image
 	$(Q)$(ECHO) $(call UPPER, $@)

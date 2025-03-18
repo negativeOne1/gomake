@@ -25,6 +25,7 @@ MKDIR                 ?= mkdir
 GO                    ?= go
 GOBUILD               ?= $(GO) build
 GOGET                 ?= $(GO) get
+GORUN                 ?= $(GO) run
 
 GO_SRC                ?= $(shell find ./ -name '*.go')
 
@@ -81,10 +82,12 @@ DEV_MAKE  := make/Makefile.development
 FOR_MAKE  := make/Makefile.format
 TST_MAKE  := make/Makefile.testing
 AUD_MAKE  := make/Makefile.audit
+LIN_MAKE  := make/Makefile.linting
 
 ALL_MAKE  := ${BASEDIR}${DEV_MAKE} \
 						 ${BASEDIR}${FOR_MAKE} \
 						 ${BASEDIR}${TST_MAKE} \
+						 ${BASEDIR}${LIN_MAKE} \
 						 ${BASEDIR}${AUD_MAKE}
 
 include $(ALL_MAKE)
